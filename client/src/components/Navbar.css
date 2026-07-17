@@ -1,0 +1,226 @@
+/* client/src/components/Navbar.css */
+
+/* ----- Variables (for consistency) ----- */
+:root {
+  --primary: #e9405f;
+  --primary-dark: #c02a48;
+  --secondary: #f5a623;
+  --text: #1a1a2e;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.10);
+  --radius: 16px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ----- Navbar base ----- */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 0 24px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: box-shadow var(--transition);
+}
+.navbar.scrolled {
+  box-shadow: var(--shadow);
+}
+
+/* ----- Logo ----- */
+.navbar-logo {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+}
+.navbar-logo span {
+  color: var(--text);
+}
+
+/* ----- Desktop links ----- */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.navbar-links li {
+  display: inline;
+}
+.navbar-links a {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #4a4a5a;
+  text-decoration: none;
+  transition: color var(--transition);
+  position: relative;
+}
+.navbar-links a:hover {
+  color: var(--primary);
+}
+.navbar-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: width var(--transition);
+}
+.navbar-links a:hover::after {
+  width: 100%;
+}
+
+/* ----- Desktop actions ----- */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.navbar-actions .navbar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #333;
+  text-decoration: none;
+  transition: background var(--transition);
+}
+.navbar-actions .navbar-avatar:hover {
+  background: #ccc;
+}
+.navbar-actions .nav-link {
+  color: #4a4a5a;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition);
+}
+.navbar-actions .nav-link:hover {
+  color: var(--primary);
+}
+.navbar-actions .btn-primary-small {
+  background: var(--primary);
+  color: white;
+  padding: 6px 18px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: background var(--transition);
+}
+.navbar-actions .btn-primary-small:hover {
+  background: var(--primary-dark);
+}
+.navbar-actions .logout-btn {
+  background: none;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #4a4a5a;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+.navbar-actions .logout-btn:hover {
+  color: var(--primary);
+}
+
+/* ----- Mobile menu button ----- */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+/* ----- Mobile menu dropdown ----- */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  background: white;
+  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  position: absolute;
+  top: 72px;
+  right: 20px;
+  min-width: 200px;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.mobile-menu.open {
+  display: flex;
+}
+.mobile-menu a,
+.mobile-menu button {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 6px 0;
+  transition: color var(--transition);
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.mobile-menu a:hover,
+.mobile-menu button:hover {
+  color: var(--primary);
+}
+.mobile-menu .mobile-join {
+  background: var(--primary);
+  color: white;
+  text-align: center;
+  padding: 8px 0;
+  border-radius: 40px;
+  font-weight: 600;
+}
+.mobile-menu .mobile-join:hover {
+  background: var(--primary-dark);
+  color: white;
+}
+.mobile-menu .mobile-logout {
+  color: #d32f2f;
+}
+.mobile-menu .mobile-logout:hover {
+  color: #b71c1c;
+}
+
+/* ----- Responsive breakpoint ----- */
+@media (max-width: 768px) {
+  .navbar {
+    height: 64px;
+    padding: 0 16px;
+  }
+  .navbar-links,
+  .navbar-actions {
+    display: none;
+  }
+  .mobile-menu-btn {
+    display: block;
+  }
+  .mobile-menu {
+    top: 64px;
+    right: 16px;
+    min-width: 180px;
+  }
+}

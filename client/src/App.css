@@ -1,0 +1,148 @@
+/* client/src/App.css */
+
+/* ----- Google Font import ----- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ----- Global reset & base ----- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #fafafa;
+  color: #1a1a2e;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ----- Root container (React mount) ----- */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ----- App layout ----- */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #fafafa;
+  /* subtle radial gradients for depth */
+  background-image: radial-gradient(circle at 10% 20%, rgba(233, 64, 95, 0.04) 0%, transparent 50%),
+                    radial-gradient(circle at 90% 80%, rgba(245, 166, 35, 0.04) 0%, transparent 50%);
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 72px; /* space for fixed navbar */
+  transition: padding-top 0.3s ease;
+}
+
+/* ----- Responsive navbar spacing ----- */
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 64px;
+  }
+}
+
+/* ----- Custom scrollbar ----- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #e9405f;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c02a48;
+}
+
+/* ----- Utility classes (used across components) ----- */
+.glass {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #e9405f, #f5a623);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ----- Animations ----- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(233, 64, 95, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(233, 64, 95, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(233, 64, 95, 0);
+  }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+/* ----- Base button styles (fallback) ----- */
+.btn-primary {
+  background: #e9405f;
+  color: white;
+  padding: 10px 28px;
+  border-radius: 40px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: #c02a48;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #e9405f;
+  padding: 10px 28px;
+  border-radius: 40px;
+  font-weight: 600;
+  border: 2px solid #e9405f;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.btn-outline:hover {
+  background: #e9405f;
+  color: white;
+}

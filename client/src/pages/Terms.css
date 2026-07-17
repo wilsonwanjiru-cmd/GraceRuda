@@ -1,0 +1,111 @@
+/* client/src/pages/Terms.css */
+
+/* ----- Variables (for consistency) ----- */
+:root {
+  --primary: #e9405f;
+  --primary-dark: #c02a48;
+  --secondary: #f5a623;
+  --text: #1a1a2e;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.10);
+  --radius: 16px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ----- Page container ----- */
+.terms-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.terms-page h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  color: var(--text);
+}
+
+.terms-page .last-updated {
+  color: #888;
+  font-size: 0.95rem;
+  margin: 0 0 32px 0;
+  border-bottom: 1px solid #eaeef2;
+  padding-bottom: 16px;
+}
+
+/* ----- Sections ----- */
+.terms-page section {
+  margin-bottom: 32px;
+}
+
+.terms-page h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: var(--text);
+}
+
+.terms-page p {
+  color: #444;
+  line-height: 1.8;
+  margin: 0 0 12px 0;
+  font-size: 1.05rem;
+}
+
+.terms-page ul {
+  padding-left: 24px;
+  margin: 8px 0 0 0;
+}
+
+.terms-page ul li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+  color: #444;
+  font-size: 1.05rem;
+}
+
+.terms-page a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition);
+}
+
+.terms-page a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* ----- Animations ----- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 640px) {
+  .terms-page {
+    padding: 32px 16px;
+  }
+
+  .terms-page h1 {
+    font-size: 2.2rem;
+  }
+
+  .terms-page h2 {
+    font-size: 1.4rem;
+  }
+
+  .terms-page p,
+  .terms-page ul li {
+    font-size: 1rem;
+  }
+}

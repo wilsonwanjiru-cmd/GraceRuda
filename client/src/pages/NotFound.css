@@ -1,0 +1,97 @@
+/* client/src/pages/NotFound.css */
+
+/* ----- Variables (for consistency) ----- */
+:root {
+  --primary: #e9405f;
+  --primary-dark: #c02a48;
+  --secondary: #f5a623;
+  --text: #1a1a2e;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.10);
+  --radius: 16px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ----- Page container ----- */
+.not-found {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #fafafa;
+  background-image: radial-gradient(circle at 20% 30%, rgba(233, 64, 95, 0.04) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 70%, rgba(245, 166, 35, 0.04) 0%, transparent 50%);
+}
+
+/* ----- Content card ----- */
+.not-found-content {
+  text-align: center;
+  max-width: 500px;
+  padding: 40px 32px;
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hover);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.not-found-content .icon {
+  font-size: 5rem;
+  margin-bottom: 8px;
+}
+
+.not-found-content h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: var(--text);
+}
+
+.not-found-content p {
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0 0 24px 0;
+}
+
+.not-found-content .btn-home {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  padding: 12px 36px;
+  border-radius: 40px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.not-found-content .btn-home:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* ----- Animations ----- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 480px) {
+  .not-found-content {
+    padding: 32px 20px;
+  }
+
+  .not-found-content h1 {
+    font-size: 2rem;
+  }
+
+  .not-found-content .icon {
+    font-size: 4rem;
+  }
+}

@@ -1,0 +1,274 @@
+/* client/src/pages/Pricing.css */
+
+/* ----- Variables (for consistency) ----- */
+:root {
+  --primary: #e9405f;
+  --primary-dark: #c02a48;
+  --secondary: #f5a623;
+  --text: #1a1a2e;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.10);
+  --radius: 16px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ----- Page container ----- */
+.pricing-page {
+  padding: 40px 24px 64px;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* ----- Header ----- */
+.pricing-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.pricing-header h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.pricing-header p {
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* ----- Grid ----- */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ----- Plan card ----- */
+.pricing-plan {
+  background: white;
+  border-radius: var(--radius);
+  padding: 32px 24px 28px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  transition: transform var(--transition), box-shadow var(--transition);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.pricing-plan:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Popular plan */
+.pricing-plan.popular {
+  border: 2px solid var(--primary);
+  background: linear-gradient(to bottom, white, #fff5f7);
+}
+
+.popular-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--secondary);
+  color: #1a1a2e;
+  padding: 4px 18px;
+  border-radius: 30px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ----- Plan content ----- */
+.pricing-plan .plan-name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+
+.pricing-plan .price {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin: 8px 0 0 0;
+  color: var(--text);
+}
+
+.pricing-plan .price span {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #888;
+}
+
+.pricing-plan .plan-subtitle {
+  color: #888;
+  font-size: 0.95rem;
+  margin: 0 0 16px 0;
+}
+
+/* ----- Feature list ----- */
+.pricing-plan .feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 28px;
+  text-align: left;
+  flex: 1;
+}
+
+.pricing-plan .feature-list li {
+  padding: 6px 0;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pricing-plan .feature-list .included {
+  color: #333;
+}
+
+.pricing-plan .feature-list .excluded {
+  color: #aaa;
+}
+
+/* ----- Plan buttons ----- */
+.pricing-plan .btn-plan {
+  display: inline-block;
+  padding: 12px 32px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+  width: 100%;
+}
+
+.pricing-plan .btn-plan:hover {
+  transform: translateY(-2px);
+}
+
+.btn-plan.free {
+  background: #eee;
+  color: #333;
+}
+
+.btn-plan.free:hover {
+  background: #ddd;
+}
+
+.btn-plan.premium {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-plan.premium:hover {
+  background: var(--primary-dark);
+}
+
+.btn-plan.credits {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.btn-plan.credits:hover {
+  background: #e0e0e0;
+}
+
+.pricing-plan .payment-note {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 12px 0 0 0;
+}
+
+.pricing-plan.popular .payment-note {
+  color: var(--primary);
+  opacity: 0.7;
+}
+
+/* ----- Footer ----- */
+.pricing-footer {
+  text-align: center;
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid #eaeef2;
+}
+
+.pricing-footer p {
+  color: #888;
+  font-size: 0.9rem;
+  margin: 4px 0;
+}
+
+.pricing-footer a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition);
+}
+
+.pricing-footer a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* ----- Animations ----- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 768px) {
+  .pricing-page {
+    padding: 32px 16px;
+  }
+
+  .pricing-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+
+  .pricing-plan.popular {
+    order: -1;
+  }
+
+  .pricing-plan .price {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pricing-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .pricing-plan {
+    padding: 24px 16px;
+  }
+
+  .pricing-plan .feature-list li {
+    font-size: 0.9rem;
+  }
+}
