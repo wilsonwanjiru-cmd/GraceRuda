@@ -16,19 +16,17 @@ const { setupSocket } = require('./sockets');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-    cors: {
-        origin: process.env.CLIENT_URL || 'http://localhost:3000',
-        credentials: true,
-    },
-});
-
-// Connect to MongoDB
-connectDB();
-
-// Middleware
-app.use(cors({
+  cors: {
     origin: process.env.CLIENT_URL || 'http://localhost:3000',
     credentials: true,
+  },
+});
+
+connectDB();
+
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  credentials: true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -41,15 +39,9 @@ app.use('/api/matches', matchRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 
-// Health check
-app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', message: 'Ruda Dating API is running' });
-});
+app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
-// Socket.IO
 setupSocket(io);
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-});
+server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
