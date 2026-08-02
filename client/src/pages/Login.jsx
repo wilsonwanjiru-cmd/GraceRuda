@@ -1,10 +1,11 @@
 // client/src/pages/Login.jsx
+// client/src/pages/Login.jsx
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, clearError, clearSuccess } from '../redux/slices/authSlice';
 import { Helmet } from 'react-helmet-async';
-import './Login.css'; // import modern CSS
+import './Login.css';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/dashboard');
+      navigate('/browse'); // 🔥 changed from '/dashboard' to '/browse'
     }
     return () => {
       dispatch(clearError());

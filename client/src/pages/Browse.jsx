@@ -1,4 +1,5 @@
 // client/src/pages/Browse.jsx
+// client/src/pages/Browse.jsx
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
@@ -6,7 +7,7 @@ import { fetchUsers } from '../redux/slices/userSlice';
 import { likeUser, unlikeUser } from '../redux/slices/matchSlice';
 import { Link } from 'react-router-dom';
 import { isPremium } from '../utils/helpers';
-import './Browse.css'; // import modern CSS
+import './Browse.css';
 
 const Browse = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,8 @@ const Browse = () => {
     city: '',
   });
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchUsers(filters));
@@ -51,6 +54,27 @@ const Browse = () => {
     dispatch(fetchUsers({}));
   };
 
+  const openModal = (user) => {
+    setSelectedUser(user);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedUser(null);
+  };
+
+  const handleModalLike = (e) => {
+    e.stopPropagation();
+    if (selectedUser) {
+      if (isLiked(selectedUser._id)) {
+        handleUnlike(selectedUser._id);
+      } else {
+        handleLike(selectedUser._id);
+      }
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -60,7 +84,7 @@ const Browse = () => {
 
       <div className="browse-page">
         <div className="browse-header">
-          <h1>Browse Singles</h1>
+          <h1>Singles Near You</h1>
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="filter-toggle"
@@ -69,7 +93,6 @@ const Browse = () => {
           </button>
         </div>
 
-        {/* Filters Panel */}
         {showFilters && (
           <div className="filter-panel">
             <div className="filter-row">
@@ -117,61 +140,61 @@ const Browse = () => {
               </div>
             </div>
             <div className="filter-actions">
-              <button onClick={applyFilters} className="btn-apply">
-                Apply Filters
-              </button>
-              <button onClick={resetFilters} className="btn-reset">
-                Reset
-              </button>
+              <button onClick={applyFilters} className="btn-apply">Apply Filters</button>
+              <button onClick={resetFilters} className="btn-reset">Reset</button>
             </div>
           </div>
         )}
 
-        {/* Content */}
         {isLoading ? (
-          <div className="loading-spinner">
-            <div className="spinner"></div>
-          </div>
+          <div className="loading-spinner"><div className="spinner"></div></div>
         ) : users.length === 0 ? (
           <div className="empty-state">
             <div className="icon">😕</div>
             <p>No users found matching your criteria.</p>
-            <button onClick={resetFilters} className="empty-action">
-              Clear filters
-            </button>
+            <button onClick={resetFilters} className="empty-action">Clear filters</button>
           </div>
         ) : (
           <div className="users-grid">
             {users.map((user) => (
-              <div key={user._id} className="user-card">
-                <Link to={`/profile/${user._id}`} className="photo-link">
-                  <div className="photo">
-                    {user.photos && user.photos.length > 0 ? (
-                      <img src={user.photos[0]} alt={user.fullname} />
-                    ) : (
-                      '👤'
-                    )}
-                  </div>
-                </Link>
+              <div
+                key={user._id}
+                className="user-card"
+                onClick={() => openModal(user)}
+              >
+                <div className="photo">
+                  {user.photos && user.photos.length > 0 ? (
+                    <img src={user.photos[0]} alt={user.fullname} />
+                  ) : (
+                    '👤'
+                  )}
+                </div>
                 <div className="info">
                   <div className="name-row">
-                    <Link to={`/profile/${user._id}`} className="name-link">
-                      <h3>{user.fullname}, {user.age}</h3>
-                    </Link>
+                    <h3>{user.fullname}, {user.age}</h3>
                     {user.premium && <span className="premium-badge">⭐</span>}
                   </div>
                   <p className="location">{user.city || 'Kenya'}</p>
-                  <div className="actions">
+                  <div className="actions" onClick={(e) => e.stopPropagation()}>
                     <button
-                      onClick={() =>
-                        isLiked(user._id) ? handleUnlike(user._id) : handleLike(user._id)
-                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (isLiked(user._id)) {
+                          handleUnlike(user._id);
+                        } else {
+                          handleLike(user._id);
+                        }
+                      }}
                       className={`btn-like ${isLiked(user._id) ? 'liked' : ''}`}
                     >
                       {isLiked(user._id) ? '❤️ Liked' : 'Like'}
                     </button>
                     {isPremium(currentUser) && (
-                      <Link to={`/chat/${user._id}`} className="btn-chat">
+                      <Link
+                        to={`/chat/${user._id}`}
+                        className="btn-chat"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         💬 Chat
                       </Link>
                     )}
@@ -182,6 +205,44 @@ const Browse = () => {
           </div>
         )}
       </div>
+
+      {/* Modal */}
+      {modalOpen && selectedUser && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModal}>✕</button>
+            <div className="modal-photo">
+              {selectedUser.photos && selectedUser.photos.length > 0 ? (
+                <img src={selectedUser.photos[0]} alt={selectedUser.fullname} />
+              ) : (
+                <span>👤</span>
+              )}
+            </div>
+            <div className="modal-info">
+              <h2>{selectedUser.fullname}, {selectedUser.age}</h2>
+              <p>{selectedUser.city || 'Kenya'} • {selectedUser.gender}</p>
+              <p className="modal-bio">{selectedUser.bio || 'No bio yet.'}</p>
+              <div className="modal-actions">
+                <button
+                  onClick={handleModalLike}
+                  className={`btn-like ${isLiked(selectedUser._id) ? 'liked' : ''}`}
+                >
+                  {isLiked(selectedUser._id) ? '❤️ Liked' : 'Like'}
+                </button>
+                {isPremium(currentUser) && (
+                  <Link
+                    to={`/chat/${selectedUser._id}`}
+                    className="btn-chat"
+                    onClick={closeModal}
+                  >
+                    💬 Chat
+                  </Link>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
