@@ -189,15 +189,14 @@ const Browse = () => {
                     >
                       {isLiked(user._id) ? '❤️ Liked' : 'Like'}
                     </button>
-                    {isPremium(currentUser) && (
-                      <Link
-                        to={`/chat/${user._id}`}
-                        className="btn-chat"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        💬 Chat
-                      </Link>
-                    )}
+                    {/* ✅ Chat button always visible for all users */}
+                    <Link
+                      to={`/chat/${user._id}`}
+                      className="btn-chat"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      💬 Chat
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -229,15 +228,14 @@ const Browse = () => {
                 >
                   {isLiked(selectedUser._id) ? '❤️ Liked' : 'Like'}
                 </button>
-                {isPremium(currentUser) && (
-                  <Link
-                    to={`/chat/${selectedUser._id}`}
-                    className="btn-chat"
-                    onClick={closeModal}
-                  >
-                    💬 Chat
-                  </Link>
-                )}
+                {/* ✅ Chat button always visible in modal */}
+                <Link
+                  to={`/chat/${selectedUser._id}`}
+                  className="btn-chat"
+                  onClick={closeModal}
+                >
+                  💬 Chat
+                </Link>
               </div>
             </div>
           </div>
