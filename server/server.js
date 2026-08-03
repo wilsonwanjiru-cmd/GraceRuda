@@ -1,4 +1,5 @@
 // server/server.js
+// server/server.js
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -11,6 +12,7 @@ const likeRoutes = require('./routes/likeRoutes');
 const matchRoutes = require('./routes/matchRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
+const paymentRoutes = require('./routes/paymentRoutes'); // ✅ imported
 const { setupSocket } = require('./sockets');
 
 const app = express();
@@ -18,17 +20,15 @@ const server = http.createServer(app);
 
 // ----- CORS: allow multiple origins (including localhost) -----
 const allowedOrigins = [
-  process.env.CLIENT_URL,                 // deployed frontend (e.g., https://graceruda-1.onrender.com)
-  'http://localhost:3000',                // dev frontend (common)
-  'http://localhost:5173',                // Vite default dev port
+  process.env.CLIENT_URL,
+  'http://localhost:3000',
+  'http://localhost:5173',
   'http://127.0.0.1:3000',
   'http://127.0.0.1:5173',
-].filter(Boolean); // remove undefined values
+].filter(Boolean);
 
-// Express CORS
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -54,6 +54,9 @@ const io = new Server(server, {
   },
 });
 
+// Make io accessible in controllers via req.app.get('socketio')
+app.set('socketio', io);
+
 connectDB();
 
 app.use(express.json());
@@ -66,6 +69,7 @@ app.use('/api/likes', likeRoutes);
 app.use('/api/matches', matchRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
+app.use('/api/payments', paymentRoutes); // ✅ mounted
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 

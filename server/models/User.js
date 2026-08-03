@@ -1,3 +1,5 @@
+// server/models/User.js
+// server/models/User.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
@@ -5,6 +7,7 @@ const UserSchema = new mongoose.Schema(
   {
     fullname: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    phoneNumber: { type: String, default: '', trim: true },   // ← NEW: for M‑PESA payments
     password: { type: String, required: true, minlength: 6 },
     gender: { type: String, enum: ['male', 'female'], required: true },
     lookingFor: { type: String, enum: ['male', 'female', 'both'], required: true },
@@ -24,6 +27,7 @@ const UserSchema = new mongoose.Schema(
     premium: { type: Boolean, default: false },
     premiumExpiry: { type: Date, default: null },
     chatCredits: { type: Number, default: 0 },
+    freeMessagesUsed: { type: Number, default: 0 },
     isVerified: { type: Boolean, default: false },
     isAdmin: { type: Boolean, default: false },
     isBlocked: { type: Boolean, default: false },
@@ -32,7 +36,7 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ✅ FIXED: pre-save hook without using `next`
+// Pre-save hook to hash password (fixed)
 UserSchema.pre('save', async function () {
   if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(10);

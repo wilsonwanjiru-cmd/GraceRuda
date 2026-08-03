@@ -1,0 +1,52 @@
+/* client/src/components/NotificationBadge.css */
+:root {
+  --badge-bg: #e9405f;
+  --badge-text: #ffffff;
+  --badge-shadow: rgba(233, 64, 95, 0.4);
+}
+
+.notification-badge {
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  border-radius: 50%;
+  padding: 0 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.6;
+  min-width: 20px;
+  text-align: center;
+  display: inline-block;
+  margin-left: 4px;
+  vertical-align: top;
+  box-shadow: 0 2px 8px var(--badge-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: badgePulse 1.8s ease-in-out infinite;
+}
+
+/* Slightly larger on hover */
+.notification-badge:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 14px var(--badge-shadow);
+}
+
+@keyframes badgePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive fine‑tune */
+@media (max-width: 480px) {
+  .notification-badge {
+    font-size: 0.6rem;
+    min-width: 16px;
+    line-height: 1.5;
+    padding: 0 4px;
+  }
+}

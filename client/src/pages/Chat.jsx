@@ -13,7 +13,8 @@ import {
 } from '../redux/slices/chatSlice';
 import { getSocket, emitTyping, emitMarkRead } from '../services/socket';
 import { formatTime } from '../utils/helpers';
-import './Chat.css'; // import modern CSS
+import api from '../services/api'; // 👈 for payment call
+import './Chat.css';
 
 const Chat = () => {
   const { userId } = useParams();
@@ -32,6 +33,13 @@ const Chat = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+
+  // Payment modal state
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentMessage, setPaymentMessage] = useState('');
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   useEffect(() => {
     dispatch(fetchConversations());
@@ -73,19 +81,31 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // 👇 Handle send message with payment flow
   const handleSend = async (e) => {
     e.preventDefault();
     if (!text.trim() || !currentConversation) return;
 
-    await dispatch(
-      sendMessage({
-        conversationId: currentConversation._id,
-        text: text.trim(),
-      })
-    );
-    setText('');
-    setIsTyping(false);
-    emitTyping(currentConversation._id, false);
+    try {
+      await dispatch(
+        sendMessage({
+          conversationId: currentConversation._id,
+          text: text.trim(),
+        })
+      ).unwrap();
+      setText('');
+      setIsTyping(false);
+      emitTyping(currentConversation._id, false);
+    } catch (error) {
+      // Check if the error indicates payment is needed
+      if (error.needsPayment) {
+        setShowPaymentModal(true);
+        setPaymentMessage('');
+        setPaymentSuccess(false);
+      } else {
+        alert(error.message || 'Failed to send message. Please try again.');
+      }
+    }
   };
 
   const handleTyping = (e) => {
@@ -103,6 +123,38 @@ const Chat = () => {
         emitTyping(currentConversation._id, false);
       }
     }, 1000);
+  };
+
+  // 👇 Initiate M‑PESA STK Push
+  const handlePayment = async () => {
+    if (!phoneNumber.trim()) {
+      setPaymentMessage('Please enter your M‑PESA phone number.');
+      return;
+    }
+    setPaymentLoading(true);
+    setPaymentMessage('');
+    try {
+      const response = await api.post('/api/payments/mpesa/stkpush', {
+        phoneNumber: phoneNumber.trim(),
+        amount: 10,
+      });
+      setPaymentSuccess(true);
+      setPaymentMessage(`✅ Payment initiated! Check your phone for the M‑PESA prompt. 
+                         Checkout ID: ${response.data.CheckoutRequestID || 'N/A'}`);
+      // Optionally, poll for payment status or wait for webhook
+      // For now, we'll close the modal after a few seconds and let the user try again.
+      setTimeout(() => {
+        setShowPaymentModal(false);
+        // Refresh user data to update credits (optional)
+        // dispatch(loadUser()) – you may need to import loadUser from authSlice
+      }, 5000);
+    } catch (error) {
+      setPaymentMessage(
+        error.response?.data?.message || 'Payment initiation failed. Please try again.'
+      );
+    } finally {
+      setPaymentLoading(false);
+    }
   };
 
   const getOtherUser = (conv) => {
@@ -255,6 +307,52 @@ const Chat = () => {
           )}
         </div>
       </div>
+
+      {/* Payment Modal */}
+      {showPaymentModal && (
+        <div className="modal-overlay payment-modal-overlay" onClick={() => setShowPaymentModal(false)}>
+          <div className="modal-content payment-modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setShowPaymentModal(false)}>✕</button>
+            <h2>💳 Purchase Chat Credits</h2>
+            <p>You've used your 5 free messages.</p>
+            <p><strong>KES 10</strong> for <strong>50</strong> more messages.</p>
+            {!paymentSuccess ? (
+              <>
+                <div className="payment-input-group">
+                  <label htmlFor="phone">M‑PESA Phone Number</label>
+                  <input
+                    id="phone"
+                    type="text"
+                    placeholder="e.g. 254712345678"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    disabled={paymentLoading}
+                  />
+                </div>
+                {paymentMessage && <p className="payment-error">{paymentMessage}</p>}
+                <button
+                  className="btn-pay"
+                  onClick={handlePayment}
+                  disabled={paymentLoading}
+                >
+                  {paymentLoading ? 'Processing...' : 'Pay Now'}
+                </button>
+              </>
+            ) : (
+              <div className="payment-success">
+                <p>✅ {paymentMessage}</p>
+                <p className="payment-note">You will receive a prompt on your phone. Please complete the transaction.</p>
+                <button
+                  className="btn-close-payment"
+                  onClick={() => setShowPaymentModal(false)}
+                >
+                  Close
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 };

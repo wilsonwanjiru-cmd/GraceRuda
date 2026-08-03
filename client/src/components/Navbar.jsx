@@ -1,9 +1,11 @@
 // client/src/components/Navbar.jsx
+// client/src/components/Navbar.jsx
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
-import './Navbar.css'; // imported CSS
+import NotificationBadge from './NotificationBadge'; // 👈 new import
+import './Navbar.css';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -12,7 +14,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Add scroll shadow effect
+  // Scroll shadow effect
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -41,7 +43,12 @@ const Navbar = () => {
         {isAuthenticated && (
           <>
             <li><Link to="/matches">Matches</Link></li>
-            <li><Link to="/chat">Chat</Link></li>
+            <li>
+              <Link to="/chat">
+                Chat
+                <NotificationBadge /> {/* 👈 badge next to Chat */}
+              </Link>
+            </li>
           </>
         )}
         <li><Link to="/pricing">Pricing</Link></li>
@@ -83,7 +90,10 @@ const Navbar = () => {
         {isAuthenticated && (
           <>
             <Link to="/matches" onClick={() => setIsMenuOpen(false)}>Matches</Link>
-            <Link to="/chat" onClick={() => setIsMenuOpen(false)}>Chat</Link>
+            <Link to="/chat" onClick={() => setIsMenuOpen(false)}>
+              Chat
+              <NotificationBadge /> {/* 👈 badge in mobile menu */}
+            </Link>
           </>
         )}
         <Link to="/pricing" onClick={() => setIsMenuOpen(false)}>Pricing</Link>

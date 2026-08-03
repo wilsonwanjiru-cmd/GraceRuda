@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import { fetchUsers } from '../redux/slices/userSlice';
 import { likeUser, unlikeUser } from '../redux/slices/matchSlice';
+import { addNotification } from '../redux/slices/notificationSlice'; // 👈 new
 import { Link } from 'react-router-dom';
 import { isPremium } from '../utils/helpers';
+import { getSocket } from '../services/socket'; // 👈 new
 import './Browse.css';
 
 const Browse = () => {
@@ -24,6 +26,30 @@ const Browse = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+
+  // 👇 Listen for real‑time notifications (likes & matches)
+  useEffect(() => {
+    const socket = getSocket();
+    if (!socket) return;
+
+    const handleNotification = (data) => {
+      // Add to Redux notification store
+      dispatch(addNotification(data));
+
+      // Show a friendly alert (you can replace with a toast library)
+      if (data.type === 'like') {
+        alert('💕 Someone liked your profile!');
+      } else if (data.type === 'match') {
+        alert('🎉 It\'s a match! You and someone liked each other!');
+      }
+    };
+
+    socket.on('new-notification', handleNotification);
+
+    return () => {
+      socket.off('new-notification', handleNotification);
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchUsers(filters));
@@ -189,7 +215,7 @@ const Browse = () => {
                     >
                       {isLiked(user._id) ? '❤️ Liked' : 'Like'}
                     </button>
-                    {/* ✅ Chat button always visible for all users */}
+                    {/* Chat button always visible */}
                     <Link
                       to={`/chat/${user._id}`}
                       className="btn-chat"
@@ -228,7 +254,6 @@ const Browse = () => {
                 >
                   {isLiked(selectedUser._id) ? '❤️ Liked' : 'Like'}
                 </button>
-                {/* ✅ Chat button always visible in modal */}
                 <Link
                   to={`/chat/${selectedUser._id}`}
                   className="btn-chat"
